@@ -6,18 +6,9 @@ var moment = require("moment");
 var fs = require("fs")
 var keys = require("./keys.js");
 var spotify = new Spotify(keys.spotify);
-var command = process.argv[2]
-var searchterm = process.argv.slice(3).join(" ") // .join(" ") turns an array into a string
-// look up.slice and .join - array methods in general
+var command = process.argv[2];
+var searchterm = process.argv.slice(3).join(" ");
 
-console.log(command)
-console.log(searchterm)
-
-// look at the command that the user enters and figure out which function to run.
-// need function to search the BandsInTown API for what the user selected (bands)
-// need function to search Spotify for Song user selects
-// need function to search OMBD for users movie
-// need function to read random .Text file and do what it says
 
 function runApp(){
     switch (command) {
@@ -40,7 +31,7 @@ function runApp(){
 
 runApp()
 
-//Concert This
+// Concert This
 function bands() {
     var queryURL = "https://rest.bandsintown.com/artists/" + searchterm + "/events?app_id=codingbootcamp";
     axios.get(queryURL).then(function(response){
@@ -48,37 +39,49 @@ function bands() {
             console.log("no concerts found.");
             return;
         }
-        console.log("upcoming concerts for " + searchterm);
-        console.log("-------------------------");
+            console.log("upcoming concerts for " + searchterm);
+            console.log("\n-------------------------\n");
+
         for (var i = 0; i <= 9; i++){
             var concert = response.data[i];
             console.log(concert.venue.name);
             console.log(concert.venue.city + ", " + (concert.venue.region || concert.venue.country)); 
             console.log(moment(concert.datetime).format("MM/DD/YYYY"))
-            console.log("-------------------------\n");
+            console.log("\n-------------------------\n");
         };
     }) 
 };
 
 
-//Spotify this song
-function song() {
-    // if (!searchterm) {
-    //     searchterm = "The Sign Ace of Base";
-    // }
 
-    spotify.search({type: "track", query: song}, function(error, data) {
-        if (error) {
-            return console.log("Error occurred: " + error);
-        }
-        console.log(data.items)
+
+// Spotify this song
+function song() {
+     if (!searchterm) {
+         console.log("Oops, looks like you forgot to enter a song but dont worry, I got you. Check this out!")
+         searchterm = "The Sign Ace of Base";
+    }
+
+        spotify.search({type: "track", query: searchterm}, function(error, data) {
+            if (error) {
+                console.log("Did you forgot the name of the song? Or maybe you mispelled the song name or the artist? Double check and try again.");
+                return console.log("Error occurred: " + error);
+            }
+
+        console.log("\n-------------------------\n");
+        console.log("Song Name: " + data.tracks.items[0].name);
+        console.log("Artist Name: " + data.tracks.items[0].artists[0].name);
+        console.log("Albulm Name: " + data.tracks.items[0].album.name);
+        console.log("Song Preview: " + data.tracks.items[0].preview_url);
+        console.log("\n-------------------------\n");
+        
     });
 } 
 
 
 
 
-//Movie This
+// Movie This
 function movie() {
     
     if (!searchterm) {
@@ -91,7 +94,7 @@ function movie() {
         function(response) {
 
             var movies = response.data;
-            console.log("-------------------------\n");
+            console.log("\n-------------------------\n");
             console.log("Movie Title: " + movies.Title);
             console.log("Release Year: " + movies.Year);
             console.log("IMBD Rating: " + movies.Ratings[0].Value);
@@ -100,5 +103,26 @@ function movie() {
             console.log("Language: " + movies.Language);
             console.log("Plot: " + movies.Plot);
             console.log("Actors: " + movies.Actors);
+            console.log("\n-------------------------\n");
         }
     )};
+
+
+
+
+// Do what it says
+function random() {
+    fs.readFile("random.txt", "utf8", function(error, data) {
+        if (error) {
+        return console.log(error);
+        }
+
+        console.log("command from random.txt file")
+
+        var array = data.split(",");
+            command = array[0];
+            searchterm = array[1];
+
+        runApp(command, searchterm);
+    });
+}
