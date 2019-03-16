@@ -1,4 +1,5 @@
 # liri-node-app
+<br/>
 
 <h1>About My App></h1>
 
@@ -17,6 +18,7 @@
 
 <h2><Getting Started</h2>
 
+
 <p>Getting started with Liri is simple. First, open up your terminal. Next, enter in the proper command syntax and your search term. Finally, run the command. Thats it!</p>
 <p>Don't worry. If you make a mistake, Liri will notify you and lead you on the right path to correcting the mistake.</p>
 
@@ -24,5 +26,4 @@
 <br/>
 
 <h2>VIDEO</h2>
-http://drive.google.com - automatic!
-[google drive](https://drive.google.com/file/d/1deA-l6idvcd-vcMMkscJqhVGJifjc4s_/view)
+<a href="https://drive.google.com/file/d/1deA-l6idvcd-vcMMkscJqhVGJifjc4s_/view">Example</a>
